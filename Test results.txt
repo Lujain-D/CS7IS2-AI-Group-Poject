@@ -1,0 +1,17 @@
+DFS using backtracking
+
+Hard puzzel results:
+
+7735.94 seconds to solve 50 puzzles
+Average step count is 6510868.18
+Average Memory usage is 0.004640MB
+
+Medium puzzel results:
+22.88 seconds to solve 50 puzzles
+Average step count is 38316.96
+Average Memory usage is 0.004319MB
+
+Easy puzzel results:
+8.98 seconds to solve 50 puzzles
+Average step count is 14684.78
+Average Memory usage is 0.003141MB
