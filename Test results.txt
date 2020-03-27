@@ -15,3 +15,28 @@ Easy puzzel results:
 8.98 seconds to solve 50 puzzles
 Average step count is 14684.78
 Average Memory usage is 0.003141MB
+
+######################################################################################################
+BFS Algorithm
+
+50 Easy Puzzles:
+
+Total steps: 1962334
+Average steps: 39246.68
+Maximun steps: 270649
+Average time: 6.2721695756912235 sec
+Maximum Time: 43.12730288505554 sec
+Average Memory Used: 96.86715874MB
+Maximum Memory Used: 107.073791MB
+
+50 Medium Puzzles
+
+Total steps: 4090781
+Average steps: 81815.62
+Maximun steps: 511645
+Average time: 12.860875277519225
+Maximum Time: 79.63450837135315
+Average Memory Used: 126.92451278MB
+Maximum Memory Used: 164.526008MB
+
+
