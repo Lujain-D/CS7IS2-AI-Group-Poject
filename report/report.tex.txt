@@ -1,0 +1,215 @@
+\documentclass{svproc}
+\usepackage{url}
+\def\UrlFont{\rmfamily}
+
+\begin{document}
+\mainmatter
+\title{Shite Sudoku Solving Survey}
+\subtitle{CS7IS2 Project (2019/2020)}
+\author{Arun Bhargav Ammanamanchi, Lujain Dweikat, Donal Egan, Bharat Vyas}
+
+\institute{
+\email{ammanama@tcd.ie}, \email{dweikatl@tcd.ie}, \email{doegan@tcd.ie}, \email{vyasb@tcd.ie}}
+
+\maketitle              % typeset the title of the contribution
+
+\begin{abstract}
+Motivation.
+
+What we do.
+
+We test these algorithms on Sudoku puzzles with three different levels of difficulty - easy, medium, and hard. We analyse the algorithms' performance with respect to a number of criteria, namely, the number of nodes expanded in the search tree, the time taken to find the solution, and the memory usage while searching for the solution. Of the algorithms that we tested, we find that the best method for solving a Sudoku puzzle is to treat it as a constraint satisfaction problem and to use the backtracking search algorithm along with the minimum-remaining values heuristic. 
+\keywords{Sudoku, constraint-satisfaction problem, depth-first search, backtracking search, heuristics}
+\end{abstract}
+%
+
+\section{Introduction}
+Motivation for work. 
+
+Describe what a Sudoku puzzle is. 
+
+Brief description of what we did.
+
+Brief description of results.
+
+The rest of the paper is structured as follows: In section 2 we provide a review of the related research in the area. In section 3 we formalise our research question and provide detailed descriptions of the algorithms that will be evaluated. In section 4 we provide the methodology for our evaluation of the algorithms, the results of our evaluation, and a discussion of these results. Finally, in Section 5 we provide a brief summary of our work and conclude the paper. 
+
+\section{Related Work}
+In this section you will discuss possible approaches to solve the problem you are addressing, \textbf{justifying your choice }of the 3 you have selected to evaluate. Also, briefly introduce the approaches you are evaluating with a specific emphasis on differences and similarities to the proposed approach(es).
+
+\section{Problem Definition and Algorithm}
+A Sudoku puzzle can be treated as a constraint satisfaction problem (CSP). Each of the 81 cells in the Sudoku grid is called a \emph{variable}. The \emph{domain} of a variable is the set of values that it can take. Initially, empty cells have domain \{1, 2, 3, 4, 5, 6, 7, 8, 9\}, while pre-filled cells have a domain consisting of the single value entered in the cell. All constraints in a Sudoku puzzle can be expressed as binary constraints. For example, the requirement that all cells the first row contain different values can be expressed as
+\[A1\neq A2, A1 \neq A3, \ldots, A2 \neq A3, A2 \neq A4,\ldots,  A7\neq A8, A7 \neq A9, A8 \neq A9.\] A cell's \emph{neighbours} is the set of cells with which it shares a constraint (it does not include the cell itself). Each cell has 20 neighbours. An \emph{assignment} is a partial or complete solution to a Sudoku.
+
+For our research, We analyse the performance of several algorithms and heuristics for solving Sudoku. The following subsections describe the algorithms and heuristics we explore.
+\subsection{AC-3}
+The AC-3 algorithm introduced by \cite{mack} is an inference algorithm for ensuring arc-consistency in a constraint satisfaction problem (csp). The following pseudocode illustrates the algorithm. The function REVISE() which the algorithm uses it described first:
+
+\vspace{12pt}
+\hspace{12pt}\textbf{function} REVISE(\emph{csp}, $X_i$, $X_j$):
+
+\hspace{24pt}\emph{revised} $\longleftarrow$ \emph{false}
+
+\hspace{24pt}\textbf{for each} $x$ in the domain of $X_i$:
+
+\hspace{36pt}\textbf{if} there is no $y$ in the domain of $X_j$ such that $x \neq y$:
+
+\hspace{48pt}remove $x$ from the domain of $X_i$
+
+\hspace{48pt}\emph{revised} $\longleftarrow$ \emph{true}
+
+\hspace{24pt}\textbf{return} \emph{revised}
+
+
+
+\vspace{12pt}
+\hspace{12pt}\textbf{function} AC-3(\emph{csp}):
+
+\hspace{24pt}\emph{queue} $\longleftarrow$ set of all arcs in \emph{csp}
+
+\hspace{24pt}\textbf{while } \emph{queue } \mbox{is not empty:}
+
+\hspace{36pt}$(X_{i}, X_{j}) \longleftarrow$ next arc in queue
+
+\hspace{36pt}\textbf{if} REVISE($X_i, X_j)$:
+
+\hspace{48pt} \textbf{if} domain of $X_i$ is empty:
+
+\hspace{60pt} \textbf{return} \emph{false}
+
+\hspace{48pt}\textbf{else:}
+
+\hspace{60pt} add arc $(X_k, X_i)$ to \emph{queue} for each neighbour $X_k$ of $X_i$
+
+\hspace{24pt} \textbf{return} \emph{true}
+
+
+\vspace{12pt}An arc is a pair of variables that share a constraint, i.e. two Sudoku cells that cannot have the same value. For example, the pair of cells $(A1, C3)$ is an arc. Initially, the \emph{queue} consists of all arcs. The first arc, for example $(A1, C3)$, is removed from the queue. For each value $x$ in the domain of $A1$, the algorithm checks if there exists some value in the domain of $C3$ which can satisfy the constraint, i.e. a value different to $x$. If no such value is found, $x$ is removed from the domain of $A1$. If, after all values have been checked, the domain of $A1$ is unchanged the algorithm moves to the next arc. Otherwise, all arcs $(Y, A1)$, where $Y$ is a neighbour of $A1$, are added to the queue. The algorithm runs until the earlier of the \emph{queue} becomes empty or the domain of a variable becomes empty
+
+
+If the domain of a variable becomes empty, the AC-3 algorithm returns \emph{false} and the constraint satisfaction problem does not have a solution. If the AC-3 algorithm reduces the size of every cell's domain to one, then the Sudoku puzzle has been solved. Otherwise, we can pass the Sudoku puzzle with reduced domain sizes to the backtracking search algorihtm (described below). 
+
+We test the performance of AC-3 as a standalone algorithm for solving Sudoku and also as a preprocessing step to reduce domain sizes before using backtracking search.
+
+\subsection{Backtracking search / Depth first search}
+\subsection{Heuristics}
+\subsubsection{Minimum-remaining-values}In the basic backtracking search algorithm described above, the next variable chosen to be assigned a value is just the next variable in the list of unassigned variables. However, there are other ways to choose this next variable. We test the whether the \emph{minimum-remaining-values}, or MRV, heuristic, introduced by \cite{bit:rein}, improves the performance of backtracking search for solving Sudoku. The idea is to always choose the next variable to be the one that is most likely to cause the current assignment to fail as a solution soon. For example, if the unassigned cell $A1$'s domain is empty while all other unassigned cells' domains are non-empty, the $MRV$ heuristic will choose $A1$ as the next cell to be assigned a value. The failure of the current assignment as a solution to the Sudoku will be immediately detected and time will not be spent expanding the current assignment further before the failure is detected.
+\subsubsection{Least-constraining-value}
+Similarly, once the next unassigned Sudoku cell has been chosen, the backtracking search algorithm needs to decide on order in which to check the values in the cell's domain. Basic backtracking search will just choose the next value in the chosen cell's domain.  We test the whether the \emph{least-constraining-value} ($LCV$) heuristic improves the performance of backtracking search for solving Sudoku. For example, suppose the only unassigned cells are the current chosen cell $A1$ with domain \{5, 7\} and the cell $A2$ with domain \{5\}. Basic backtracking search will first try setting $A1$'s value equal to 5. This will eliminate the last legal value from $A2$'s domain and the algorithm will have to backtrack to set $A1$'s value to 7. In contrast, the $LCV$ heuristic will first try setting $A1$'s value to 7. 
+\subsubsection{Maintaining arc consistency}
+\subsection{Breadth first search}
+
+\section{Experimental Results}
+\subsection{Methodology}
+We tested each algorithm on three data sets, each containing fifty Sudoku puzzles. Each data set contained puzzles with different levels of difficulty, namely, \emph{easy}, \emph{medium}, and \emph{hard}. Need to find out what determines the level of difficulty?
+
+The performance of each algorithm was evaluated according to the following three criteria:
+\begin{enumerate}
+    \item Number of nodes
+    \item Average time\footnote{Given the situation with the Covid-19 pandemic we had trouble running all pieces of code on the same machine and so figures relating to time may not be an accurate reflection}
+    \item Average maximum memory used
+\end{enumerate}
+
+For the first criterion, a node is defined as  . .. . . 
+For each criteria, we record its average value and its maximum value over each data set for each algorithm.
+
+All algorithms were implemented in Python and all of the relevant code is available in the GitHub repository associated with this paper.\footnote{https://github.com/doegan32/CS7IS2-AI-Group-Poject} All algorithms were run on a whatever computer with whatever specs.
+
+\subsection{Results}
+Tables 1, 2, and 3 display the results of our analysis. In each table, \emph{mean} is the mean value recorded across all puzzles in the data set while \emph{max} is the maximum value recorded across all puzzles the data set. 
+\begin{table}[ht]
+\centering
+\begin{tabular}{ |c c c c c c c c| } 
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Number of Nodes in Search Tree}} \\
+  \hline
+   & \multicolumn{2}{|c|}{Easy} &  \multicolumn{2}{|c|}{Medium} &  \multicolumn{2}{|c|}{Difficult} \\
+ \multicolumn{1}{|c|}{}  & mean &  \multicolumn{1}{c|}{max}& mean &  \multicolumn{1}{c|}{max} & mean &  \multicolumn{1}{c|}{max} \\
+  \hline
+\multicolumn{1}{|l|}{Backtracking / Depth first search (baseline)} & $134$ & \multicolumn{1}{c|}{$3{,}994$} & $111$ & \multicolumn{1}{c|}{$2{,}027$} & $503{,}831$ & \multicolumn{1}{c|}{$25{,}158{,}597$}\\ 
+\multicolumn{1}{|l|}{Breadth first search (BFS)} & $39{,}246$ & \multicolumn{1}{c|}{$270{,}649$} & $81{,}816$ & \multicolumn{1}{c|}{$511{,}645$} & - & \multicolumn{1}{c|}{-} \\ 
+\multicolumn{1}{|l|}{Backtracking with AC-3} & $14{,}685$ & \multicolumn{1}{c|}{$145{,}169$} & $38{,}318$ & \multicolumn{1}{c|}{$346{,}922$} & $6{,}510{,}868$ & \multicolumn{1}{c|}{} \\ 
+\multicolumn{1}{|l|}{Backtracking with MRV}& $\textbf{53}$ & \multicolumn{1}{c|}{$\textbf{59}$} & $\textbf{57}$ & \multicolumn{1}{c|}{$\textbf{59}$} & $\textbf{62}$ & \multicolumn{1}{c|}{$\textbf{64}$} \\ 
+\multicolumn{1}{|l|}{Backtracking with LCV} & $134$ & \multicolumn{1}{c|}{$3{,}994$} & $111$ & \multicolumn{1}{c|}{$2{,}027$} & $503{,}831$ & \multicolumn{1}{c|}{$25{,}158{,}597$}\\ 
+\multicolumn{1}{|l|}{Backtracking with MAC} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} \\ 
+ \hline
+\end{tabular}
+\caption{Table illustrating number of nodes expanded in search trees for each algorithm}
+\label{table:1}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{ |c c c c c c c c| } 
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Memory Usage (in MBs)}} \\
+  \hline
+   & \multicolumn{2}{|c|}{Easy} &  \multicolumn{2}{|c|}{Medium} &  \multicolumn{2}{|c|}{Difficult} \\
+ \multicolumn{1}{|c|}{}  & mean &  \multicolumn{1}{c|}{max}& mean &  \multicolumn{1}{c|}{max} & mean &  \multicolumn{1}{c|}{max} \\
+  \hline
+\multicolumn{1}{|l|}{Backtracking / Depth first search (baseline)}& 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} \\ 
+\multicolumn{1}{|l|}{Breadth first search (BFS)} &$96.8672$  & \multicolumn{1}{c|}{$107.0738$} & $126.9245$ & \multicolumn{1}{c|}{164.526} & - & \multicolumn{1}{c|}{-} \\ 
+\multicolumn{1}{|l|}{Backtracking with AC-3} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} \\ 
+\multicolumn{1}{|l|}{Backtracking with MRV}& 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} \\ 
+\multicolumn{1}{|l|}{Backtracking with LCV} & 154 & \multicolumn{1}{c|}{000} & 448 & \multicolumn{1}{c|}{000} & 30026 &\multicolumn{1}{c|}{000}\\ 
+\multicolumn{1}{|l|}{Backtracking with MAC} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} \\ 
+ \hline
+\end{tabular}
+\caption{Table illustrating memory usage for each algorithm}
+\label{table:2}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{ |c c c c c c c c| } 
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Time Taken (in seconds)}} \\
+  \hline
+   & \multicolumn{2}{|c|}{Easy} &  \multicolumn{2}{|c|}{Medium} &  \multicolumn{2}{|c|}{Difficult} \\
+ \multicolumn{1}{|c|}{}  & mean &  \multicolumn{1}{c|}{max}& mean &  \multicolumn{1}{c|}{max} & mean &  \multicolumn{1}{c|}{max} \\
+  \hline
+\multicolumn{1}{|l|}{Backtracking / Depth first search (baseline)}& 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} \\ 
+\multicolumn{1}{|l|}{Breadth first search (BFS)} & $6.2722$ & \multicolumn{1}{c|}{$43.1273$} & $12.8609$ & \multicolumn{1}{c|}{$79.6345$} & - & \multicolumn{1}{c|}{-} \\ 
+\multicolumn{1}{|l|}{Backtracking with AC-3} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} \\ 
+\multicolumn{1}{|l|}{Backtracking with MRV}& 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} \\ 
+\multicolumn{1}{|l|}{Backtracking with LCV} & 154 & \multicolumn{1}{c|}{000} & 448 & \multicolumn{1}{c|}{000} & 30026 &\multicolumn{1}{c|}{000}\\ 
+\multicolumn{1}{|l|}{Backtracking with MAC} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} & 000 & \multicolumn{1}{c|}{000} \\ 
+ \hline
+\end{tabular}
+\caption{Table illustrating time taken for each algorithm}
+\label{table:3}
+\end{table}
+
+
+present the results of the experimental evaluation. Graphical data and tables are two common ways to present the results. Also, a comparison with a baseline should be provided.
+\subsection{Discussion}
+discuss the implication of the results of the proposed algorithms/models. What are the weakness/strengths of the method(s) compared with the other methods/baseline?
+
+
+\section{Conclusions}
+Provide a final discussion of the main results and conclusions of the report. Comment on the lesson learnt and possible improvements.
+
+
+
+A standard and well formatted bibliography of papers cited in the report. For example:
+
+\begin{thebibliography}{6}
+%
+
+\bibitem {norv:russ}
+Norvig, P., Russell, S.: Artificial Intelligence A Modern Approach Third Edition. Pearson Education Limited (2016)
+
+\bibitem {mack}
+Mackworth, A.K.,Consistency in Networks of Relations.
+In: Artificial Intelligence 1977 8(1):99-118. doi:10.1016/0004-3702(77)90007-8
+
+\bibitem {bit:rein}
+Bitner, J.R., Reingold, E.M.: Backtrack Programming Techniques.
+In: Communications of the ACM, 18(11), 651-656. doi:10.1145/361219.361224
+
+\bibitem {norvig}
+Solving Every Sudoku Puzzle. \url{https://norvig.com/sudoku.html}
+
+
+\end{thebibliography}
+\end{document}
