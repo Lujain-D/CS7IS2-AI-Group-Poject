@@ -40,3 +40,28 @@ ll and have 3 different domain values, then there are three possible action sequ
 
 Similarly, each node is further expanded into child nodes. The \emph{explored} which is initially defined as an empty set, keep the record of all the explored nodes for solution. The newly generated nodes which matches the nodes in \emph{explored} set are discarded and not added to \emph{frontier}. So, the nodes in the \emph{explored} set are not visited again for solution. When the function GOAL-TEST() returns true, the child node or solution node is returned.
 
+
+################################################################################################################################
+Biblography
+
+\begin{thebibliography}{6}
+%
+
+\bibitem {norv:russ}
+Norvig, P., Russell, S.: Artificial Intelligence A Modern Approach Third Edition. Pearson Education Limited (2016)
+
+\bibitem {mack}
+Mackworth, A.K.,Consistency in Networks of Relations.
+In: Artificial Intelligence 1977 8(1):99-118. doi:10.1016/0004-3702(77)90007-8
+
+\bibitem {bit:rein}
+Bitner, J.R., Reingold, E.M.: Backtrack Programming Techniques.
+In: Communications of the ACM, 18(11), 651-656. doi:10.1145/361219.361224
+
+\bibitem {norvig}
+Solving Every Sudoku Puzzle. \url{https://norvig.com/sudoku.html}
+
+\bibitem {moore}
+Moore, Edward F. (1959). "The shortest path through a maze". Proceedings of the International Symposium on the Theory of Switching. Harvard University Press. pp. 285–292. As cited by Cormen, Leiserson, Rivest, and Stein
+
+\end{thebibliography}
