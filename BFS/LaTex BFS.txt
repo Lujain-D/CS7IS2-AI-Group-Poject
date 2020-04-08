@@ -1,0 +1,67 @@
+\subsection{Breadth first search}
+Breadth-First Search (BFS) is another graph search algorithm introduced by \cite{moore}, which explores the graph layer by layer. It starts with the root node just like depth-first search (DFS). But unlike DFS, it explores all the neighbour nodes at present layer prior moving to nodes at next layer. The function BFS() in the following pseudocode illustrates the algorithm. 
+
+\vspace{12pt}
+\hspace{12pt}\textbf{function} BFS(\emph{problem}):
+
+\hspace{24pt}\emph{node} $\longleftarrow$ INSERT(MAKE-NODE(INITIAL-STATE[\emph{problem}])
+
+\hspace{24pt}\textbf{if }\mbox{GOAL-TEST(STATE[\emph{node}]):}
+
+\hspace{36pt} \textbf{return }\emph{node}
+
+\hspace{24pt}\emph{frontier} $\longleftarrow$ a FIFO queue with \emph{node} as only element
+
+\hspace{24pt}\emph{explored} $\longleftarrow$ an empty set
+
+\hspace{24pt}\textbf{while } \emph{frontier} \mbox{is not empty:}
+
+\hspace{36pt}\emph{node} $\longleftarrow$ POP (\emph{frontier})
+
+\hspace{36pt}\emph{explored} $\longleftarrow$ PUSH (STATE[\emph{node}])
+
+\hspace{36pt}\textbf{for each} \emph{action} \textbf{in} \mbox ACTIONS({\emph{problem}, STATE[\emph{node}]):} 
+
+\hspace{48pt} \emph{child} $\longleftarrow$ CHILD-NODE(\emph{problem, node, action})
+
+\hspace{48pt} \textbf{if} STATE[\emph{child}] is not in \emph{explored} or \emph{frontier}:
+
+\hspace{60pt} \textbf{if} GOAL-TEST(STATE[\emph{child}]):
+
+\hspace{72pt} \textbf{return} \emph{child}
+
+\hspace{60pt} \emph{frontier} $\longleftarrow$ INSERTALL(\emph{child}, \emph{frontier})
+
+\vspace{12pt}The search algorithms work by considering various possible action sequences, with solution being one of them. This algorithm starts with initial state as being the root node of graph. A\emph{node} correspond to a state in the state space of problem graph, with \emph{actions} as its branches. 
+
+
+The first step is to check if root node is the solution state i.e, if problem is already solved by using function GOAL-TEST(). Then, a FIFO(First In First Out) queue \emph{frontier} is defined with just root node (initial state) in it. Now, root node is expanded into child nodes, by finding first empty cell and considering only domain values of that cell. For example, if A2 is the first empty ce
+ll and have 3 different domain values, then there are three possible action sequences in this layer. This means three child nodes are generated from root node after expansion. After each expansion, \emph{frontier} is updated and every node or state is checked for solution.
+
+Similarly, each node is further expanded into child nodes. The \emph{explored} which is initially defined as an empty set, keep the record of all the explored nodes for solution. The newly generated nodes which matches the nodes in \emph{explored} set are discarded and not added to \emph{frontier}. So, the nodes in the \emph{explored} set are not visited again for solution. When the function GOAL-TEST() returns true, the child node or solution node is returned.
+
+
+################################################################################################################################
+Biblography
+
+\begin{thebibliography}{6}
+%
+
+\bibitem {norv:russ}
+Norvig, P., Russell, S.: Artificial Intelligence A Modern Approach Third Edition. Pearson Education Limited (2016)
+
+\bibitem {mack}
+Mackworth, A.K.,Consistency in Networks of Relations.
+In: Artificial Intelligence 1977 8(1):99-118. doi:10.1016/0004-3702(77)90007-8
+
+\bibitem {bit:rein}
+Bitner, J.R., Reingold, E.M.: Backtrack Programming Techniques.
+In: Communications of the ACM, 18(11), 651-656. doi:10.1145/361219.361224
+
+\bibitem {norvig}
+Solving Every Sudoku Puzzle. \url{https://norvig.com/sudoku.html}
+
+\bibitem {moore}
+Moore, Edward F. (1959). "The shortest path through a maze". Proceedings of the International Symposium on the Theory of Switching. Harvard University Press. pp. 285–292. As cited by Cormen, Leiserson, Rivest, and Stein
+
+\end{thebibliography}
