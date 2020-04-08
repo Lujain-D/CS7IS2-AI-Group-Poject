@@ -295,7 +295,7 @@ lists_of_puzzles = [easy, medium, hard]
 
 for puzzles in lists_of_puzzles:
     print("-----------------Difficulty Changed--------------------")
-    for puzzle in hard:
+    for puzzle in puzzles:
 
         grid = []
         grid2D = []
