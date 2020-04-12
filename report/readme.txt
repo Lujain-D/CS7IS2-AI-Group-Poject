@@ -9,3 +9,4 @@ Did the literature review, implementation, and evaluation of Algorithm X. Contri
 Donal Egan-
 
 Bharat Vyas-
+Implementation and Evaluation of Breadth-first Search (BFS) algorithm on Sudoku puzzles.
