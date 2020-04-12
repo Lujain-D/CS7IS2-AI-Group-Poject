@@ -312,15 +312,15 @@ for puzzles in lists_of_puzzles:
         dlx = DancingLinks(grid2D)
         dlx.generate_links()
 
-        tracemalloc.start()
+#        tracemalloc.start()
 
         dlx = dlx.solve()
 
-        current, peak = tracemalloc.get_traced_memory()
-        tracemalloc.stop()
+#        current, peak = tracemalloc.get_traced_memory()
+#        tracemalloc.stop()
 
         end = time.time()
         execution_time = (end - start) * 1000
         print("execution time: ", execution_time)
-        print("peak: ", peak)
-        print("nodes: ", steps)
+#        print("peak: ", peak)
+#        print("nodes: ", steps)
